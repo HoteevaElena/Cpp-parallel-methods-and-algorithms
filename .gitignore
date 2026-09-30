@@ -1,0 +1,20 @@
+.vs/
+x64/
+Debug/
+Release/
+*.user
+*.suo
+*.exe
+*.obj
+*.pdb
+*.ilk
+*.userosscache
+*.idb
+*.exp
+*.lib
+*.tlog
+*.log
+ThreadPool Part 2/data.txt
+*.pdf
+*.doc
+*.docx
