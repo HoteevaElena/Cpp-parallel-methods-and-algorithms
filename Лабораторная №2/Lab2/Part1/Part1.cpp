@@ -19,24 +19,58 @@ void OutArray(double* arr, size_t N){
     std::cout << std::endl;
 }
 
-void PowArr(double* b, double* a, size_t beg, size_t end, int K) {
+void PowArr(double* b, double* a, size_t beg, size_t end, size_t K) {
     for (size_t i = beg; i < end; i++) {
-        for (int j = 0; j < K; j++)
+        for (size_t j = 0; j < K; j++)
             b[i] += pow(a[i], 1.789);
     }
 }
 
-int main()
-{
-    size_t const size = 5000;
+int main() {
+    size_t const size = 1000000;
+    size_t const N = 3000;
+    size_t const K = 1000;
     std::vector<double> a(size);
     std::vector<double> b(size, 0.0);
     RndArr(a.data(), size, 1, 10);
-    /*OutArray(a.data(), size);*/
+    std::vector<std::thread> threads;
     clock_t start1 = clock();
-    PowArr(b.data(), a.data(), 0, size, 500000);
+    for (size_t i = 0; i < N; i++) {
+        size_t start = i * size / N;
+        size_t end = (i == (N - 1)) ? size : (i + 1) * size / N;
+        threads.push_back(std::thread(PowArr, b.data(), a.data(), start, end, K));
+        std::cout << "Id thread t" << i+1 << ": " << threads.back().get_id() << std::endl;
+    }
+    for (auto& t : threads) t.join();
     clock_t end1 = clock();
-    std::cout << "The time: " << (float)(end1 - start1) / CLOCKS_PER_SEC << " seconds\n" << std::endl;
-    /*OutArray(b.data(), size);*/
+    std::cout << "The parallel time: " << (float)(end1 - start1) / CLOCKS_PER_SEC << " seconds\n" << std::endl;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //size_t const size = 1000000;
+    //std::vector<double> a(size);
+    //std::vector<double> b(size, 0.0);
+    //RndArr(a.data(), size, 1, 10);
+    ///*OutArray(a.data(), size);*/
+    //clock_t start1 = clock();
+    //PowArr(b.data(), a.data(), 0, size, 1000);
+    //clock_t end1 = clock();
+    //std::cout << "The time: " << (float)(end1 - start1) / CLOCKS_PER_SEC << " seconds\n" << std::endl;
+    ///*OutArray(b.data(), size);*/

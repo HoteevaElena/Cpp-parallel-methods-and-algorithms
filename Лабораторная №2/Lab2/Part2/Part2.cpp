@@ -1,20 +1,111 @@
-﻿//// Part2.cpp : This file contains the 'main' function. Program execution begins and ends there.
-////
-//
-//#include <iostream>
-//
-//int main()
-//{
-//    std::cout << "Hello World!\n";
+﻿#include <iostream>   
+#include <thread>     
+#include <ctime>     
+#include <cmath>      
+#include <vector>
+#include <iomanip>
+#include <cstdlib>
+
+void PowArr(double* b, double* a, size_t start, size_t size, size_t step) {
+	for (size_t i = start; i < size; i += step) {
+		for (size_t j = 0; j < i; j++)
+			b[i] += pow(a[i], 1.789);
+	}
+}
+
+void RndArr(double* mas, size_t N, int a, int b) {
+	for (size_t i = 0; i < N; i++)
+		mas[i] = ((double)(a + rand() % (b - a + 1))) / 100;
+}
+
+int main() {
+	size_t const size = 100000;
+	size_t const N = 2250;
+	std::vector<double> a(size);
+	std::vector<double> b(size, 0.0);
+	RndArr(a.data(), size, 1, 10);
+	std::vector<std::thread> threads;
+	clock_t start1 = clock();
+	for (size_t t = 0; t < N; t++) {
+		threads.push_back(std::thread(PowArr, b.data(), a.data(), t, size, N));
+		std::cout << "Id thread t" << t + 1 << ": " << threads.back().get_id() << std::endl;
+	}
+	for (auto& t : threads) t.join();
+	clock_t end1 = clock();
+	std::cout << "The parallel time: " << (float)(end1 - start1) / CLOCKS_PER_SEC << " seconds\n" << std::endl;
+}
+
+
+
+
+
+
+//void PowArr(double* b, double* a, size_t start, size_t size, size_t step) {
+//	for (size_t i = start; i < size; i += step) {
+//		for (size_t j = 0; j < i; j++)
+//			b[i] += pow(a[i], 1.789);
+//	}
 //}
-//
-//// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-//// Debug program: F5 or Debug > Start Debugging menu
-//
-//// Tips for Getting Started: 
-////   1. Use the Solution Explorer window to add/manage files
-////   2. Use the Team Explorer window to connect to source control
-////   3. Use the Output window to see build output and other messages
-////   4. Use the Error List window to view errors
-////   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-////   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
+
+//int main() {
+//	size_t const size = 100000;
+//	size_t const N = 50;
+//	std::vector<double> a(size);
+//	std::vector<double> b(size, 0.0);
+//	RndArr(a.data(), size, 1, 10);
+//	std::vector<std::thread> threads;
+//	clock_t start1 = clock();
+//	for (size_t t = 0; t < N; t++) {
+//		threads.push_back(std::thread(PowArr, b.data(), a.data(), t, size, N));
+//		std::cout << "Id thread t" << t + 1 << ": " << threads.back().get_id() << std::endl;
+//	}
+//	for (auto& t : threads) t.join();
+//	clock_t end1 = clock();
+//	std::cout << "The parallel time: " << (float)(end1 - start1) / CLOCKS_PER_SEC << " seconds\n" << std::endl;
+//}
+
+
+
+
+//void PowArr(double* b, double* a, size_t start, size_t end) {
+//	for (size_t i = start; i < end; i++) {
+//		for (size_t j = 0; j < i; j++)
+//			b[i] += pow(a[i], 1.789);
+//	}
+//}
+
+//int main() {
+//	size_t const size = 100000;
+//	size_t const N = 3000;
+//	std::vector<double> a(size);
+//	std::vector<double> b(size, 0.0);
+//	RndArr(a.data(), size, 1, 10);
+//	std::vector<std::thread> threads;
+//	clock_t start1 = clock();
+//	for (size_t i = 0; i < N; i++) {
+//		size_t start = i * size / N;
+//		size_t end = (i == (N - 1)) ? size : (i + 1) * size / N;
+//		threads.push_back(std::thread(PowArr, b.data(), a.data(), start, end));
+//		std::cout << "Id thread t" << i + 1 << ": " << threads.back().get_id() << std::endl;
+//	}
+//	for (auto& t : threads) t.join();
+//	clock_t end1 = clock();
+//	std::cout << "The parallel time: " << (float)(end1 - start1) / CLOCKS_PER_SEC << " seconds\n" << std::endl;
+//}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
